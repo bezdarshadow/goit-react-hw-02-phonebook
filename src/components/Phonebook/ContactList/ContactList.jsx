@@ -8,8 +8,7 @@ const ContactList = ({ contacts, filter, onDelete }) => {
     .filter(contact => contact.name.toLowerCase().includes(normalizeFilter))
     .map(contact => (
       <li className={styles.item} key={contact.id}>
-        <p className={styles.text}>{contact.name}</p>
-        <p className={styles.text}>{contact.number}</p>
+        <p className={styles.text}>{contact.name}: {contact.number}</p>
         <button className={styles.button} type="button" onClick={() => onDelete(contact.id)}>Delete</button>
       </li>
     ));
