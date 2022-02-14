@@ -1,5 +1,5 @@
 import { Component } from 'react';
-
+import { nanoid } from 'nanoid';
 
 import ContactFilter from './ContactFilter';
 import ContactList from './ContactList';
@@ -28,12 +28,17 @@ class Phonebook extends Component {
 
   addContact = (newContact) => {
     const {contacts} = this.state
-    if(contacts.find(contact => contact.name === newContact.name)){
-        alert(`${newContact.name} is already in contacts`)
+
+    const newCont = {
+      ...newContact,
+      id: nanoid(),
+    }
+    if(contacts.find(contact => contact.name === newCont.name)){
+        alert(`${newCont.name} is already in contacts`)
         return;
     }
     this.setState(({contacts}) => ({
-        contacts: [...contacts, newContact],
+        contacts: [...contacts, newCont],
       }));
   }
   deleteContact = (contactId) => {
@@ -44,10 +49,18 @@ class Phonebook extends Component {
 
   }
 
+  filteredContacts = () => {
+    const { filter, contacts } = this.state;
+    const normalizeFilter = filter.toLowerCase();
+    const contactsList = contacts.filter(contact => contact.name.toLowerCase().includes(normalizeFilter))
+
+    return contactsList;
+  };
+
 
   render() {
-    const { contacts, filter } = this.state;
-    const {changeFilter, addContact, deleteContact} = this;
+    const { filter } = this.state;
+    const {changeFilter, addContact, deleteContact, filteredContacts} = this;
 
     return (
       <div className={styles.section}>
@@ -55,7 +68,7 @@ class Phonebook extends Component {
         <ContactForm onChange={addContact}/>
         <h2 className={styles.title}>Contacts</h2>
         <ContactFilter value={filter} onChange={changeFilter}/>
-        <ContactList contacts={contacts} filter={filter} onDelete={deleteContact}/>
+        <ContactList contacts={filteredContacts()} onDelete={deleteContact}/>
       </div>
     );
   }
