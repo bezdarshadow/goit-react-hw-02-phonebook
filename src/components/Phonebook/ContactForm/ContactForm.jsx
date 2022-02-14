@@ -27,7 +27,6 @@ class ContactForm extends Component {
     const newContact = {
       name,
       number,
-      id: nanoid(),
     };
     const { onChange } = this.props;
 
